@@ -1,8 +1,27 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 1997-2006 Sun Microsystems, Inc.  All Rights Reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Sun designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Sun in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
+ * CA 95054 USA or visit www.sun.com if you need additional information or
+ * have any questions.
  */
-
 package progressbarillusion;
 
 import java.awt.Color;
@@ -26,12 +45,15 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 /**
  * This class exists to illustrate how to make an animated progress bar by
  * making a custom ProgressBarUI delegate.  It was created in response to
- * a StackOverflow question (http://stackoverflow.com/questions/4609628/changing-jprogressbar/4610875#4610875)
- * which in turn was asked in response to an online video (http://www.newscientist.com/blogs/nstv/2010/12/best-videos-of-2010-progress-bar-illusion.html) showing that
+ * <a href="http://stackoverflow.com/questions/4609628/changing-jprogressbar/4610875#4610875">a StackOverflow question</a>
+ * which in turn was asked in response to <a href="http://www.newscientist.com/blogs/nstv/2010/12/best-videos-of-2010-progress-bar-illusion.html">an online video</a>
+ * showing that
  * progress bars which have an animated movement to them appear to move faster.
  * In particular, bars which have a pattern moving right to left appear
  * to move faster than those whose pattern moves left to right.
  * 
+ * Some source code is taken from the BasicProgressBarUI class, source code
+ * available <a href="http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/javax/swing/plaf/basic/BasicProgressBarUI.java">on grepcode.</a>
  *
  * @author ndunn
  */
@@ -110,9 +132,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
             return;
         }
 
-        if (!(g instanceof Graphics2D)) {
-            return;
-        }
 
         /*
          Copied from the BasicProgressBar code - calculates the actual dimensions of
@@ -129,51 +148,41 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
         // amount of progress to draw; measured in pixels
         int amountFull = getAmountFull(b, barRectWidth, barRectHeight);
 
-        Graphics2D g2 = (Graphics2D)g;
 
+        // Make sure we only draw in the region of the progress bar.  This allows
+        // us to be sloppy with our drawing (which is impossible to avoid when
+        // dealing with the drawImage commands) and yet still avoid bad artifacts
+        g.setClip(b.left, b.top, amountFull, barRectHeight);
 
-
-        // BasicGraphicsUtils is not public.
-
-
-        boolean leftToRight = true; // BasicGraphicsUtils.isLeftToRight(c)
-        if (leftToRight) {
-
-
-            g.setClip(b.left, b.top, amountFull, barRectHeight);
-
-            int offset = 0;
-            if (direction == AnimationDirection.RIGHT_TO_LEFT) {
-                offset = (int) (map(getAnimationIndex(), 0, numFrames, barImage.getWidth(), 0));
-            }
-            else {
-                offset = (int) (map(getAnimationIndex(), 0, numFrames, 0, barImage.getWidth()));
-            }
-
-            // How many repetitions of the image need to be drawn to ensure that
-            // a full progress bar has no gaps in the image?
-            int numRepetitions = progressBar.getWidth() / barImage.getWidth();
-            // ensure both sides
-            numRepetitions += 2;
-
-            // draw it shifted left
-            for (int i = 0; i < numRepetitions; i++) {
-                // The first image we want drawn to the left, even offscreen if
-                // necessary.
-                int xOffset = (i - 1) * barImage.getWidth() + offset;
-                g.drawImage(barImage, xOffset, 0, null);
-            }
-            g2.drawRect(b.left, b.top, amountFull, barRectHeight);
-//                    amountFull + b.left, (barRectHeight/2) + b.top);
-        } else {
-            g2.drawLine((barRectWidth + b.left),
-                    (barRectHeight/2) + b.top,
-                    barRectWidth + b.left - amountFull,
-                    (barRectHeight/2) + b.top);
+        
+        int offset = 0;
+        if (direction == AnimationDirection.RIGHT_TO_LEFT) {
+            offset = (int) (map(getAnimationIndex(), 0, numFrames, barImage.getWidth(), 0));
         }
+        else {
+            offset = (int) (map(getAnimationIndex(), 0, numFrames, 0, barImage.getWidth()));
+        }
+
+        // How many repetitions of the image need to be drawn to ensure that
+        // a full progress bar has no gaps in the image?
+        int numRepetitions = progressBar.getWidth() / barImage.getWidth();
+        // ensure both sides
+        numRepetitions += 2;
+
+        // draw it shifted left
+        for (int i = 0; i < numRepetitions; i++) {
+            // The first image we want drawn to the left, even offscreen if
+            // necessary.
+            int xOffset = (i - 1) * barImage.getWidth() + offset;
+            g.drawImage(barImage, xOffset, 0, null);
+        }
+        g.drawRect(b.left, b.top, amountFull, barRectHeight);
     }
 
     /**
+     * Map a value in one range to a value in a different range. See
+     * <a href="http://developmentality.wordpress.com/2009/12/15/useful-utility-functions-0-of-n/">a blog post</a>
+     * I wrote about the subject.
      * @param value The incoming value to be converted
      * @param low1  Lower bound of the value's current range
      * @param high1 Upper bound of the value's current range
@@ -188,7 +197,7 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
         return lerp(low2, high2, proportion);
     }
 
-    // Linearly interpolate between two values
+    /** Linearly interpolate between two values */
     public static final double lerp(double value1, double value2, double amt) {
         return ((value2 - value1) * amt) + value1;
     }
