@@ -83,7 +83,7 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
      */
     private BufferedImage barImage = createRippleImage(Color.blue.darker(), Color.white);
 
-    // Create a ribbon
+    // Create an image with alternating light and dark patterns
     protected BufferedImage createRippleImage(Color darkColor, Color lightColor) {
         int width = 40;
         int height = 40;
@@ -195,7 +195,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
             int xOffset = (i - 1) * barImage.getWidth() + offset;
             g.drawImage(barImage, xOffset, 0, null);
         }
-        g.drawRect(b.left, b.top, amountFull, barRectHeight);
     }
 
     /**
@@ -208,7 +207,7 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
      * @param low2  Lower bound of the value's target range
      * @param high2 Upper bound of the value's target range
      */
-    public static final double map(double value, double low1, double high1, double low2, double high2) {
+    public static double map(double value, double low1, double high1, double low2, double high2) {
 
         double diff = value - low1;
         double proportion = diff / (high1 - low1);
@@ -217,11 +216,9 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
     }
 
     /** Linearly interpolate between two values */
-    public static final double lerp(double value1, double value2, double amt) {
+    public static double lerp(double value1, double value2, double amt) {
         return ((value2 - value1) * amt) + value1;
     }
-
-
 
     /**
      * @param args the command line arguments
@@ -254,7 +251,7 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
                 mutuallyExclusiveButtons.add(rightToLeft);
                 rightToLeft.setSelected(true);
 
-                
+
                 add(leftToRight);
                 add(rightToLeft);
 
