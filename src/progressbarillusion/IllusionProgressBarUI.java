@@ -55,6 +55,9 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
  * Some source code is taken from the BasicProgressBarUI class, source code
  * available <a href="http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/javax/swing/plaf/basic/BasicProgressBarUI.java">on grepcode.</a>
  *
+ * This class is not production worthy; in particular, it only is designed to work
+ * with left to right, horizontal progress bars.
+ *
  * @author ndunn
  */
 public class IllusionProgressBarUI extends BasicProgressBarUI {
@@ -72,10 +75,16 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
         startAnimationTimer();
     }
 
+    /**
+     * We create an image containing a gradient from dark to white and back to dark.
+     * We tile this pattern multiple times across the length of the progress bar.
+     * By redrawing this image multiple times across the length of the bar (and
+     * at different offsets each frame), we achieve the illusion of motion.
+     */
     private BufferedImage barImage = createRippleImage(Color.blue.darker(), Color.white);
 
     // Create a ribbon
-    public BufferedImage createRippleImage(Color darkColor, Color lightColor) {
+    protected BufferedImage createRippleImage(Color darkColor, Color lightColor) {
         int width = 40;
         int height = 40;
 
@@ -88,7 +97,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
         g2.fillRect(0, 0, width/2, height);
         g2.setPaint(lightToDark);
         g2.fillRect(width/2, 0, width/2, height);
-
         return image;
     }
 
@@ -100,18 +108,12 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
         this.direction = direction;
     }
 
-    
-
-    @Override
-    protected void paintIndeterminate(Graphics g, JComponent c) {
-        super.paintIndeterminate(g, c);
-        g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(getAnimationIndex()), progressBar.getWidth()/2, progressBar.getHeight());
-    }
 
     /**
-     * numFrames is private in the BasicProgressBarUI and always equal to 0 in
-     * determinate mode.  Override with our own private variable..
+     * Used by an internal timer to increment the state of the animation.
+     *
+     * This code is copied from the original implementation, but with our own
+     * numFrames variable (the standard numFrames is private in ProgressBarUI)
      */
     @Override
     protected void incrementAnimationIndex() {
@@ -124,6 +126,22 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
     }
 
 
+    /**
+     * This method is called when the progress bar is in determinate mode (e.g.
+     * the progress bar is reflecting 50% completion) and the bar needs to be
+     * redrawn.
+     *
+     * In order to achieve an effect of movement, we take the gradient image
+     * we created (@see barImage), and tile it across the length of the filled
+     * in area of the progress bar.  At each frame, this method is called, and the
+     * currentFrameIndex variable is changed.  We use this value to move the
+     * center of the tiled images to the right or to the left depending on which
+     * direction or animation is moving.
+     *
+     *
+     * @param g the graphics context onto which to draw the determinate progress bar
+     * @param c the component
+     */
     @Override
     protected void paintDeterminate(Graphics g, JComponent c) {
         // We are only going to deal with horizontal painting
@@ -131,7 +149,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
             super.paintDeterminate(g, c);
             return;
         }
-
 
         /*
          Copied from the BasicProgressBar code - calculates the actual dimensions of
@@ -154,7 +171,10 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
         // dealing with the drawImage commands) and yet still avoid bad artifacts
         g.setClip(b.left, b.top, amountFull, barRectHeight);
 
-        
+
+        // Here we calculate a pixel offset by which to shift all of our tiled images.
+        // If we're moving right to left, then we offset by a decreasing amount each
+        // tick.  If we're moving left to right, we do the opposite.
         int offset = 0;
         if (direction == AnimationDirection.RIGHT_TO_LEFT) {
             offset = (int) (map(getAnimationIndex(), 0, numFrames, barImage.getWidth(), 0));
@@ -166,10 +186,9 @@ public class IllusionProgressBarUI extends BasicProgressBarUI {
         // How many repetitions of the image need to be drawn to ensure that
         // a full progress bar has no gaps in the image?
         int numRepetitions = progressBar.getWidth() / barImage.getWidth();
-        // ensure both sides
+        // ensure both sides have full coverage just to be safe
         numRepetitions += 2;
 
-        // draw it shifted left
         for (int i = 0; i < numRepetitions; i++) {
             // The first image we want drawn to the left, even offscreen if
             // necessary.
