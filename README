@@ -1,5 +1,4 @@
 Illusion Bar:
-(Edited with TODO Eclipse extension)
 
 	Summary of Improvements:
 		- Add vertical bar @done
@@ -44,5 +43,8 @@ Illusion Bar:
 		- Clean Class Name
 		- Create Jar 
 		- Add JavaDoc
+
+(Edited with TODO Eclipse extension:  https://github.com/sebastianbenz/eclipse-task-editor)
+(p.s. Rename extension .todo to see in todo editor)
 
 Signed-off-by: Daneel Reventelov <daneel.reventelov@gmail.com>
