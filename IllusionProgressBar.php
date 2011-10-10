@@ -1,6 +1,6 @@
 <?php  header("Content-type: application/x-java-jnlp-file");
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";?>
-<jnlp spec="1.0+" codebase="https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/" href="IllusionProgressBar.jnlp">
+<jnlp spec="1.0+" codebase="https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/" href="IllusionProgressBar.php">
     <information>
         <title>IllusionProgressBar Demo</title>
         <vendor>Daneel Reventelov</vendor>
