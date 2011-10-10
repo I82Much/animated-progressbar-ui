@@ -157,20 +157,16 @@ public class CodeTextArea extends JPanel {
 
 	 public void setTextFile(String path){
 		 try{
-			URL url = Class.class.getResource("/" + path);
+			//URL url = Class.class.getResource("/" + path);
+			URL url = Thread.currentThread().getContextClassLoader().getResource(path);
 			/* Alternative URL url = loader.getClass().getClassLoader().getResource(path);*/
-			
 			if (url == null){
 				Path p = Paths.get(path);
 				url = p.toUri().toURL();
 				}
-			 
 			jtp.setPage(url);
-			
 		} catch (IOException e) { 
 			appendUnChecked(e.toString(),"error ");}
-			
-		
 	 }
 	 
 	 

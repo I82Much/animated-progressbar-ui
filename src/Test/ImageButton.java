@@ -52,14 +52,26 @@ public class ImageButton extends JButton implements ActionListener{
 
 	public static ImageIcon getImageIcon(String path, int width,int height) {
 		BufferedImage scaled = null;
-		try{			
-			URL url = Class.class.getResource("/" + path);
+		try{
+			//URL url = Thread.currentThread().getContextClassLoader().getResource("/" + path);
+			URL url = Thread.currentThread().getContextClassLoader().getResource(path);
+			/*		//.getResourceAsStream("add2.png");
+			BufferedImage image = ImageIO.read(classLoader);
+			
+			URL url = Class.class.getResource("/" + path);*/
 			/* Alternative URL url = loader.getClass().getClassLoader().getResource(path);*/
 			if (url == null){
 				Path p = Paths.get(path);
 				url = p.toUri().toURL();		
 			}
 
+			/*
+			 * 
+			 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			BufferedImage image = ImageIO.read(classLoader.getResourceAsStream("add2.png"));
+
+			 */
+			
 			BufferedImage image = ImageIO.read(url);
 			scaled = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = scaled.createGraphics();

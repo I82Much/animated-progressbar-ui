@@ -26,6 +26,9 @@ Description:
 
 Changelog:
 ---------------------
+> ### Version 0.8
+>* Othes additions:
+    + Java Web Start added to this readme (see below)
 
 > ### Version 0.8
 >* UI additions:
@@ -92,8 +95,18 @@ Changelog:
     + Other readme info		 
    
 ------------------------------------ 
- 
+
+Try the demo via Java Web Start, click here:
+
+[<img src="https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/Screenshot/jws-launch-button.png">][1]
+[1]: https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/IllusionProgressBar.jnlp "Java Web Start Demo"
+
+
+---
+
+
 ![alt text](https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/Screenshot/illusion01.png "Screnshot of Horizontal bars tab")
+
 
 
 
