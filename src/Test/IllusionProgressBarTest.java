@@ -36,6 +36,8 @@ public class IllusionProgressBarTest extends JPanel{
 		jtp.addTab("Example 1",new CodeTextArea("Text/Example1.html","Example 1"));
 		jtp.addTab("Example 2",new CodeTextArea("Example 2"));
 		jtp.addTab("Self-generated Code",new CodeTextArea("Self-generated Code"));
+		jtp.addTab("License",new CodeTextArea("Text/epl-v10.html","License",true));
+
 		add(jtp,BorderLayout.CENTER);
 		
 		add(new PlayerPanel(list),BorderLayout.NORTH);

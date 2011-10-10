@@ -130,17 +130,19 @@ public class ColorsPanel extends JPanel implements ActionListener{
 	public void setCode(ArrayList<Color> dark, ArrayList<Color> light, ArrayList<Color> together){
 		CodeTextArea code = CodeTextArea.getCodeTextArea("Self-generated Code");
 		code.clear();
+		String type = "large";
 		if (together != null) { 
-			code.appendUnChecked(colorArrayToString("col", together),"regular");
-			code.appendUnChecked("\n     ...\n","regular");
-			code.appendUnChecked("ipbi.setDarkLightColors(col);","regular");
+			code.appendUnChecked(colorArrayToString("col", together),type);
+			code.appendUnChecked("\n     ...\n", type);
+			code.appendUnChecked("ipbi.setDarkLightColors(col);",type);
 		}
 		else {
-			code.appendUnChecked(colorArrayToString("dark", dark),"regular");
-			code.appendUnChecked(colorArrayToString("ligh", light),"regular");
-			code.appendUnChecked("\n     ...\n","regular");
-			code.appendUnChecked("setDarkAndLightColor(dark,light);","regular");
-		}		
+			code.appendUnChecked(colorArrayToString("dark", dark),type);
+			code.appendUnChecked(colorArrayToString("ligh", light),type);
+			code.appendUnChecked("\n     ...\n",type);
+			code.appendUnChecked("setDarkAndLightColor(dark,light);",type);
+		}
+		
 	}
 	
 	public String colorArrayToString(String name, ArrayList<Color> l){

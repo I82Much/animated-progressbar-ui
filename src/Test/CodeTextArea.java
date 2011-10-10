@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -50,45 +49,51 @@ public class CodeTextArea extends JPanel {
 			"   ipbi.setShadowPainted(true);",
 			"   ipbi.setHighQuality(true);"};
 	
-	private static StyledDocument doc;
+	private StyledDocument doc;
 	private JTextPane jtp;
-	private boolean lineWrap = false;
+
 	
 	private static ArrayList<CodeTextArea> codes = null;
-	
+
 	public CodeTextArea(String path,String name){
-		this(name);
+		this(name,false);
+		setTextFile(path);
+	}
+	
+	public CodeTextArea(String path,String name,boolean linewrap){
+		this(name,linewrap);
 		setTextFile(path);
 	}
 	
 	public CodeTextArea(String name){
+		this(name,false);
+	}
+	
+	public CodeTextArea(String name,boolean linewrap){
 		super();
 		setName(name);	
 		if (codes == null) codes = new ArrayList<>();
 		codes.add(this);
-		jtp = new JTextPane(){
-			public boolean getScrollableTracksViewportWidth(){
-		       return lineWrap;
-			}
-		};
+		jtp = new JTextPane();
 		jtp.setEditable(false);
-
 		
+
 		doc = jtp.getStyledDocument();		
         addStylesToDocument(doc);
-        
-		JScrollPane scrollPane = new JScrollPane(jtp);
-		//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		//scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);		
+
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(100,100));
-		add(scrollPane,BorderLayout.CENTER);
-		
-		
-		
-		//setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);		
+
+        if (linewrap) {
+        	JScrollPane scrollPane = new JScrollPane(jtp);
+        	add(scrollPane,BorderLayout.CENTER);
+    		}
+        else {
+        	JPanel lineUnWrapper = new JPanel(new BorderLayout());
+        	lineUnWrapper.add(jtp,BorderLayout.CENTER);
+        	JScrollPane scrollPane = new JScrollPane(lineUnWrapper);
+        	add(scrollPane,BorderLayout.CENTER);
+    		}
 
 	}
 	
@@ -118,7 +123,7 @@ public class CodeTextArea extends JPanel {
 	}
 	
 	public void appendUnChecked(String s,String style) {
-		try {
+		try {	
 			doc.insertString(doc.getLength(),s + "\n",doc.getStyle(style));
 		} catch (BadLocationException e) {
 			e.printStackTrace();
@@ -157,9 +162,7 @@ public class CodeTextArea extends JPanel {
 
 	 public void setTextFile(String path){
 		 try{
-			//URL url = Class.class.getResource("/" + path);
 			URL url = Thread.currentThread().getContextClassLoader().getResource(path);
-			/* Alternative URL url = loader.getClass().getClassLoader().getResource(path);*/
 			if (url == null){
 				Path p = Paths.get(path);
 				url = p.toUri().toURL();

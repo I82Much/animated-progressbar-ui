@@ -26,9 +26,15 @@ Description:
 
 Changelog:
 ---------------------
-> ### Version 0.8
+> ### Version 0.8.1
+>* Test GUI additions:
+	+ EPL License tab
 >* Othes additions:
     + Java Web Start added to this readme (see below)
+>* Test GUI fix:
+	+ Text tab update and scroller
+	+ Jar resource (files)
+
 
 > ### Version 0.8
 >* UI additions:
@@ -99,7 +105,14 @@ Changelog:
 Try the demo via Java Web Start, click here:
 
 [<img src="https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/Screenshot/jws-launch-button.png">][1]
-[1]: https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/IllusionProgressBar.jnlp "Java Web Start Demo"
+[1]: https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/IllusionProgressBar.php "Java Web Start Demo"
+
+
+---
+
+<a href="https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/IllusionProgressBar.php">
+   <img src="https://github.com/I82Much/animated-progressbar-ui/raw/DaneelVersion/Screenshot/jws-launch-button.png" title="Java Web Start Demo">
+</a>
 
 
 ---
