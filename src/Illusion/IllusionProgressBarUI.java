@@ -1,3 +1,4 @@
+package Illusion;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -16,6 +17,7 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
 
 	private int frame = 200;
     private int pass = 0;
+    private int passIncr = 1;
     private int totalPass = frame*2;
 	
 	public static final int LEFT_TO_RIGHT = 0;
@@ -38,6 +40,8 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
     private IllusionProgressBarCoord bar;
     private IllusionProgressBarShadow shadow = null;
    	private boolean shadowPainted = false;
+   	private Color foregroundColor = Color.WHITE;
+   	private Color backgroundColor = Color.BLACK;
    	
    	
     
@@ -53,7 +57,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
     	progressBar.addHierarchyListener(this);    	    	
     }
 
-    
     
     public static Color getMediumColor(Color c1, Color c2, int totalPass,int incr){
     	double p = incr * (1.0/totalPass);
@@ -77,7 +80,7 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
     		int next = (colorIndex + 1)%lightColors.length; 
     		darkColor = getMediumColor(darkColors[colorIndex], darkColors[next],totalPass,pass);
     		lightColor = getMediumColor(lightColors[colorIndex], lightColors[next],totalPass,pass);
-    		pass++;    	
+    		pass += passIncr;    	
     		if (pass > totalPass) {
     			pass = 0;
     			colorIndex = (colorIndex + 1)%(lightColors.length);
@@ -99,8 +102,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
         
         GradientPaint darkToLightReflect;
 
-
-
         if (bar.getOrientation() == JProgressBar.HORIZONTAL)
         	darkToLightReflect = new GradientPaint(new Point2D.Double(0,0), actualDark, new Point2D.Double(bar.width/2, 0), actualLight,true);
         else darkToLightReflect = new GradientPaint(new Point2D.Double(0,0), actualDark, new Point2D.Double(0, bar.height/2), actualLight,true);       
@@ -110,10 +111,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
     	return image;
     }  
     
- 
-    
-    
-
     public void setRTLDirection() {
         this.direction = RIGHT_TO_LEFT;
     }
@@ -156,19 +153,14 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
         	g2.setClip(bar.getBorderShape());
         	g2.fill(bar.getBorderShape());
         }
-        
-        
-        
     }    
-
-    
+  
     
    
     protected void paintDeterminateUni(Graphics g, int barlong, int imgLong, int barShort,double roundShort, double roundLong) {    
     	//if (barImage == null) barImage = createRippleImage(dark,light);
         if (bar.width <= 0 || bar.height <= 0) return;
-        int amountFull = getAmountFull(bar.getInsets(), bar.width, bar.height);
-        
+        int amountFull = getAmountFull(bar.getInsets(), bar.width, bar.height);        
 
     	int offset = 0;
         if (direction == RIGHT_TO_LEFT) 
@@ -179,8 +171,6 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
         numRepetitions += 2;
     
         Graphics2D g2 = (Graphics2D) g;
-        
-        
         g2.setClip(bar.getClipShape(amountFull));
         
 
@@ -190,30 +180,28 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
        	}
        	
        	if (shadowPainted) g2.drawImage(shadowImage, bar.left,bar.top, null);
-       	 
        	
        	g2.setClip(bar.left,bar.top,bar.width,bar.height);
         if (bar.isStringPainted()) 
             paintString(g, bar.left, bar.top, bar.width, bar.height,amountFull, bar.getInsets());
-    	
-       	
-       	
     }
     
+    public void setSelectionBackground(Color c) { 
+    	backgroundColor = c;
+    }
     
-    
-
-
-    
+    public void setSelectionForeground(Color c) { 
+    	foregroundColor = c;     
+    }
     
     protected Color getSelectionBackground() { 
-    	return Color.BLACK; 
+    	return backgroundColor;
     }
     
     protected Color getSelectionForeground() { 
-    	return Color.BLACK;     
+    	return foregroundColor;
     }
-    
+
 
     public static double map(double value, double low1, double high1, double low2, double high2) {
         double diff = value - low1;
@@ -291,6 +279,22 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
     public boolean isShadowPainted(){
     	return shadowPainted;
     }
+    
+    public Color[] getDarkColors(){
+    	return dark;
+    }
+
+    public Color[] getLightColors(){
+    	return light;
+    }
+    
+    public void setPassIncrPercent(int percent){
+    	passIncr = (int)((totalPass*percent)/100.0);
+    }    
+    
+    public int getPassIncrPercent(){
+    	return passIncr;
+    }    
     
     
 }

@@ -1,0 +1,61 @@
+<html>
+<title>Example 1</title>
+<style type="text/css">
+TD {font-size:12px;}
+#red {color:#FF0000}
+#blue {color:#0000FF; font-weight:bold;font-size:16px;}
+#comment {font-style:italic; color:#505050}
+
+</style>
+
+<body>
+
+
+<table BORDER="0" CELLPADDING="-10" CELLSPACING="-10">
+	<tr><td></td><tr>
+	<tr><td>...</td><tr>
+	<tr><td colspan=2>private Color[] col = {Color.BLUE,Color.CYAN,Color.GRAY,Color.MAGENTA,Color.ORANGE,Color.PINK,Color.RED,Color.YELLOW};</td></tr>
+	<tr><td></td><tr>		
+	<tr><td>...</td><tr>
+	<tr><td></td><tr>
+	<tr><td colspan=2>public JPanel getBar(int width, int height, int orientation){</td><tr>
+	<tr><td></td><td>JPanel p = new JPanel();</td><tr>
+	<tr><td></td><td>bar = new JProgressBar();</td><tr>
+	<tr><td></td><td>bar.setOrientation(orientation);</td><tr>
+	<tr><td></td><td>if (orientation == JProgressBar.VERTICAL)</td><tr>
+	<tr><td></td><td>&nbsp;&nbsp;&nbsp; bar.setPreferredSize(new Dimension(height, width));	</td><tr>
+	<tr><td></td><td>else bar.setPreferredSize(new Dimension(width, height));</td><tr>
+	<tr><td></td><td>bar.setStringPainted(true);</td><tr>
+	<tr><td></td><td id="comment">/* This line is valid only for non rounded corner */</td><tr>
+	<tr><td></td><td id="red">bar.setBorder(BorderFactory.createEtchedBorder());</td><tr>
+	<tr><td></td><td id="comment">/* This line is invalid for UI*/</td><tr>
+	<tr><td></td><td id="red">bar.setForeground(Color.red);</td><tr>
+	<tr><td></td><td id="comment">/* Set the Illusion UI*/</td><tr>
+	<tr><td></td><td id="blue">bar.setUI(ipbi = new IllusionProgressBarUI(bar));</td><tr>
+	<tr><td></td><td id="comment">/* if you want round corner UI, you can choose RoundNOROUND, RoundOVAL, RoundNOROUND or custum double[] {x,y}</td><tr>
+	<tr><td></td><td id="blue">ipbi.setRoundCorner(IllusionProgressBarCoord.RoundOVAL);</td><tr>
+	<tr><td></td><td id="comment">/* Set multicolor effect with array of Colors, any Color will split in darker and brighter for effect (Default: dark = rgba(48,143,252,100);light = rgba(145,217,255,100);)*/</td><tr>
+	<tr><td></td><td id="blue">ipbi.setDarkLightColors(col);</td><tr>
+	<tr><td></td><td id="comment">/* Set border thickness (Default=0)*/</td><tr>	
+	<tr><td></td><td id="blue">ipbi.setBorder(1);</td><tr>
+	<tr><td></td><td id="comment">/* Set Color of string without bar in background (Default=BLACK)*/</td><tr>	
+	<tr><td></td><td id="blue">ipbi.setSelectionBackground(Color.RED);</td><tr>
+	<tr><td></td><td id="comment">/* Set Color of string on the bar in foreground (Default=WHITE)*/</td><tr>	
+    <tr><td></td><td id="blue">ipbi.setSelectionForeground(Color.YELLOW);</td><tr>
+	<tr><td></td><td id="comment">/* If you want shadow*/</td><tr>	
+	<tr><td></td><td id="blue">ipbi.setShadowPainted(true);</td><tr>
+	<tr><td></td><td id="commentRed">/* If you want more quality, for now no effect or too poor effect*/</td><tr>	
+	<tr><td></td><td id="blue">ipbi.setHighQuality(true);</td><tr>
+	
+	<tr><td></td><td>if (orientation == JProgressBar.HORIZONTAL)</td><tr>
+	<tr><td></td><td>&nbsp;&nbsp;&nbsp;p.setLayout(new FlowLayout(FlowLayout.CENTER,0,(lateralHeight -bar.getPreferredSize().height)/2));</td><tr>
+	<tr><td></td><td>p.add(bar);</td><tr>
+	<tr><td></td><td>return p;</td><tr>
+	<tr><td width=50>}</td><tr>
+	<tr><td></td><td></td><tr>
+	<tr><td>...</td><tr>
+</table>
+	
+</body>
+</html>
+

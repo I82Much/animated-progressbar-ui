@@ -1,3 +1,4 @@
+package Illusion;
 import java.awt.BasicStroke;
 import java.awt.Insets;
 import java.awt.Shape;
@@ -5,7 +6,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.JProgressBar;
-import javax.swing.border.EmptyBorder;
 
 
 public class IllusionProgressBarCoord implements ComponentListener{
@@ -40,7 +40,7 @@ public class IllusionProgressBarCoord implements ComponentListener{
 	
 	public IllusionProgressBarCoord(JProgressBar bar, int border){
 		this.bar = bar;
-		bar.setBorder(new EmptyBorder(new Insets(10,10,10,10)));   
+		//bar.setBorder(new EmptyBorder(new Insets(10,10,10,10)));   
 		bar.addComponentListener(this);
 		setBorder(border);
 	}
@@ -48,7 +48,6 @@ public class IllusionProgressBarCoord implements ComponentListener{
 
 	public void init(){
 		Insets in = bar.getInsets();
-
 		topBorder = in.top;
 		bottomBorder = in.bottom;
 		leftBorder = in.left;
@@ -61,6 +60,8 @@ public class IllusionProgressBarCoord implements ComponentListener{
 		
 		width = bar.getWidth() - right - left;
 		height = bar.getHeight() - bottom - top;
+
+		
 		cs = new ClippingShape(left,top,width,height,borderThickness,borderOverlap,roundWidth,roundHeight,bar.getOrientation());
 		
 		widthBorder = bar.getWidth() - rightBorder - leftBorder - borderThickness;

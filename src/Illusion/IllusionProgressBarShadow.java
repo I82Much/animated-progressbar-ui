@@ -1,3 +1,4 @@
+package Illusion;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
@@ -14,7 +15,7 @@ public class IllusionProgressBarShadow {
    	private Color shadowDark = new Color(0,0,0,255);
    	private Color shadowLight = new Color(0,0,0,0);
    	private double shadowStartGapFromMiddlePercent = 0;
-   	private double shadowEndFromBottomPercent = 0.98;
+   	private double shadowEndFromBottomPercent = 0.02;
    	private IllusionProgressBarCoord bar = null;
 
    	
@@ -29,8 +30,11 @@ public class IllusionProgressBarShadow {
         if (highQuality)
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         
-        
-       	GradientPaint darkToLightReflect = new GradientPaint(new Point2D.Double(0,bar.height/2+(bar.height/2)*shadowStartGapFromMiddlePercent), shadowLight, new Point2D.Double(0, bar.height*shadowEndFromBottomPercent), shadowDark);
+
+       	GradientPaint darkToLightReflect = 
+       			new GradientPaint(
+       					new Point2D.Double(0,bar.height/2+(bar.height/2)*shadowStartGapFromMiddlePercent), shadowLight,
+       					new Point2D.Double(0,bar.height - (bar.height/2)*shadowEndFromBottomPercent), shadowDark);
        	g2.setPaint(darkToLightReflect);
        	g2.fillRect(0,bar.height/2 , bar.width, bar.height);
     	return image;
