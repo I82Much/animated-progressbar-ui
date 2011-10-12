@@ -20,9 +20,12 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
     private int passIncr = 1;
     private int totalPass = frame*2;
 	
+    /**** Mest be same of Clippingshape ****/
 	public static final int LEFT_TO_RIGHT = 0;
 	public static final int RIGHT_TO_LEFT = 1;
-
+	public int BOTTOM_TO_TOP = LEFT_TO_RIGHT;
+	public int TOP_TO_BOTTOM = RIGHT_TO_LEFT;
+	
 	
     private int direction = RIGHT_TO_LEFT;
     public static final Color DARKDEFAULT = new Color(48,143,252,100);
@@ -111,13 +114,16 @@ public class IllusionProgressBarUI extends BasicProgressBarUI implements Hierarc
     	return image;
     }  
     
-    public void setRTLDirection() {
-        this.direction = RIGHT_TO_LEFT;
+    public void setIllusionDirection(int direction) {
+    	this.direction = direction;
     }
 
-    public void setLTRDirection() {
-        this.direction = LEFT_TO_RIGHT;
+    public void setBarDirection(int direction) {
+    	bar.setBarDirection(direction);
     }    
+    
+    
+    
     
     @Override
     protected void incrementAnimationIndex() {

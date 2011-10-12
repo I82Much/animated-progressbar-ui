@@ -18,6 +18,15 @@ public class ClippingShape {
 	private double roundWidth;
 	private int orientation = SwingConstants.HORIZONTAL;
 	
+	public static final int LEFT_TO_RIGHT = 0;
+	public static final int RIGHT_TO_LEFT = 1;
+	public int BOTTOM_TO_TOP = LEFT_TO_RIGHT;
+	public int TOP_TO_BOTTOM = RIGHT_TO_LEFT;
+	
+	private int direction = LEFT_TO_RIGHT;
+	
+	
+	
 	public ClippingShape(int x, int y,int width,int height,int border,int overlap,double roundWidth,double roundHeight, int orientation) {		
 		this.x = x;
 		this.y = y;
@@ -74,7 +83,7 @@ public class ClippingShape {
 	}
 
 	
-		
+	/*	
 	public Shape getClipShape(int ammount){
 		Rectangle2D.Double rec = new Rectangle2D.Double(x + horizontalization(ammount),y  + verticalization(ammount),totalWidth,height);
 		Area r = new Area(rec);
@@ -83,7 +92,24 @@ public class ClippingShape {
 		clip.subtract(r);
 		return clip;
 	}
-
+*/
+	public Shape getClipShape(int ammount){
+		Rectangle2D.Double rec = null;
+		if (direction == LEFT_TO_RIGHT)
+			rec = new Rectangle2D.Double(x + horizontalization(ammount),y  + verticalization(ammount),totalWidth,height);
+		else rec = new Rectangle2D.Double(x,y,totalWidth - horizontalization(ammount),height - verticalization(ammount));		
+		Area r = new Area(rec);
+		Area clip = new Area();
+		clip.add(shape);
+		clip.subtract(r);
+		return clip;
+	}
+	
+	public void setDirection(int direction){
+		this.direction = direction;
+	}
+	
+	
 	public Shape getClipShadow(){
 		return getClipShadow(height/2);
 	}
@@ -119,6 +145,13 @@ public class ClippingShape {
 
 	public double verticalization(double x) {
 		return (orientation == SwingConstants.VERTICAL) ? x : 0;
+	}
+
+
+
+
+	public void setBarDirection(int direction) {
+		this.direction = direction;
 	}	
 	
 }

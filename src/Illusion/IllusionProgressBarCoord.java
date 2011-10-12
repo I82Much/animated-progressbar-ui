@@ -161,6 +161,10 @@ public class IllusionProgressBarCoord implements ComponentListener{
 	public Shape getClipShadow(double height){
 		return cs.getClipShadow(height);
 	}
+
+	public void setBarDirection(int direction) {
+		cs.setBarDirection(direction);
+	}
 	
 
 	
