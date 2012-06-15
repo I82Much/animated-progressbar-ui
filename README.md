@@ -1,4 +1,3 @@
-
 Illusion Progress Bar:
 =======================
 Original idea by Nick Dunn
@@ -12,7 +11,10 @@ Description:
  This is a **Human Computer Interface** technique to calm the user during long operation to give the impression that computer is not frozen  and it makes something.
 
  The original author, **Nick Dunn**, had create a gradient that gives the illusion effect, and the actual author, **Daneel Reventelov** (me), extends the effect with other customizable effects, shapes and colors and ans helpful testing Gui to help the user to choose right effect for his project
-  
+
+
+Attention: This is my last release of IllusionProgressBar, I rewrote entirely the code from a new idea and the result is a new customizable progress bar with many effects so I leave this project for the new one.
+[Link](https://github.com/DaneelReventelov/JavaEffectProgressBar)
 
 > ### New Effects: 
 >
